@@ -94,14 +94,17 @@ public class WeatherActivity extends AppCompatActivity {
                     LOCATION_PERMISSION_REQUEST);
         }
 
-        // get last data
-        SharedPreferences cacheStorage = getSharedPreferences(getPackageName() + ".cache", MODE_PRIVATE);
-        cityTextView.setText(cacheStorage.getString("city", getString(R.string.default_city)));
-        weatherTextView.setText(cacheStorage.getString("weather", getString(R.string.default_weather)));
-        temperatureTextView.setText(cacheStorage.getString("temperature", getString(R.string.default_temperature)));
-
         // get user settings
         settings = new Settings(this);
+
+        // get last data
+        SharedPreferences cacheStorage = getSharedPreferences(getPackageName() + ".cache", MODE_PRIVATE);
+        CityWeather cacheCityWeather = new CityWeather.Builder()
+                .setName(cacheStorage.getString("city", getString(R.string.default_city)))
+                .setWeather(cacheStorage.getString("weather", getString(R.string.default_weather)))
+                .setTemperature(Double.parseDouble(cacheStorage.getString("temperature", "37.0")))
+                .build();
+        showData(cacheCityWeather);
 
         // show the image saved locally, if exists
         File internalDirectory = getFilesDir();
