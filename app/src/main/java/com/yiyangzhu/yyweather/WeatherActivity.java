@@ -1,6 +1,7 @@
 package com.yiyangzhu.yyweather;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -50,6 +51,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView weatherTextView;
     private TextView temperatureTextView;
 
+    private boolean refreshed = false;
+;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,12 @@ public class WeatherActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST);
         }
+
+        // get last data
+        SharedPreferences cacheStorage = getSharedPreferences(getPackageName() + ".cache", MODE_PRIVATE);
+        cityTextView.setText(cacheStorage.getString("city", getString(R.string.default_city)));
+        weatherTextView.setText(cacheStorage.getString("weather", getString(R.string.default_weather)));
+        temperatureTextView.setText(cacheStorage.getString("temperature", getString(R.string.default_temperature)));
 
         // get user settings
         settings = new Settings(this);
@@ -201,10 +210,17 @@ public class WeatherActivity extends AppCompatActivity {
                                     .setWeather(weatherTemp)
                                     .build();
 
+                            SharedPreferences.Editor editor = getSharedPreferences(getPackageName() + ".cache", MODE_PRIVATE).edit();
+                            editor.putString("city", cityTemp);
+                            editor.putString("weather", weatherTemp);
+                            editor.putString("temperature", Double.toString(temperatureTemp));
+                            editor.apply();
+
                             showData(data);
 
-                            if (settings.getCity().equals(Settings.DEFAULT_LOCATION)) {
+                            if (settings.getCity().equals(Settings.DEFAULT_LOCATION) && !refreshed) {
                                 getAndSetBackgroundImage(data.getName());
+                                refreshed = true;
                             }
 
                         } catch (Exception e) {
