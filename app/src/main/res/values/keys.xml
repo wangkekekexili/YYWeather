@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="OPEN_WEATHER_API">2de143494c0b295cca9337e1e96b00e0</string>
+    <string name="FLICKR_API">8f314c90e40089e214d63a41a5ff575a</string>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">YYWeather</string>
+
+    <!-- default value -->
+    <string name="default_city">Atlanta</string>
+    <string name="default_weather">Sunny</string>
+    <string name="default_temperature">37°C</string>
+
+</resources>
