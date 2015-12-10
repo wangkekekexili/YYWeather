@@ -1,6 +1,7 @@
 package com.yiyangzhu.yyweather;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -127,6 +129,9 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        // get settings
+        settings = new Settings(this);
+
         // get location
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
@@ -164,6 +169,19 @@ public class WeatherActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void showData(CityWeather data) {
         if (data == null) {
             return;
@@ -182,12 +200,22 @@ public class WeatherActivity extends AppCompatActivity {
 
     private void getAndSetWeather() {
 
-        Uri uri = Uri.parse("http://api.openweathermap.org/data/2.5/weather")
-                .buildUpon()
-                .appendQueryParameter("lat", Double.toString(location.getLatitude()))
-                .appendQueryParameter("lon", Double.toString(location.getLongitude()))
-                .appendQueryParameter("appid", getString(R.string.OPEN_WEATHER_API))
-                .build();
+        Uri uri = null;
+
+        if (settings.getCity().equals(Settings.DEFAULT_LOCATION)) {
+            uri = Uri.parse("http://api.openweathermap.org/data/2.5/weather")
+                    .buildUpon()
+                    .appendQueryParameter("lat", Double.toString(location.getLatitude()))
+                    .appendQueryParameter("lon", Double.toString(location.getLongitude()))
+                    .appendQueryParameter("appid", getString(R.string.OPEN_WEATHER_API))
+                    .build();
+        } else {
+            uri = Uri.parse("http://api.openweathermap.org/data/2.5/weather")
+                    .buildUpon()
+                    .appendQueryParameter("q", settings.getCity())
+                    .appendQueryParameter("appid", getString(R.string.OPEN_WEATHER_API))
+                    .build();
+        }
 
         JsonObjectRequest weatherRequest = new JsonObjectRequest(Request.Method.GET, uri.toString(), "",
                 new Response.Listener<JSONObject>() {

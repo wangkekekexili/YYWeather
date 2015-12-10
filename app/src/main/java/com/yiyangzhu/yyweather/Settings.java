@@ -24,16 +24,29 @@ public class Settings {
 
     public Settings(Activity activity) {
         this.activity = activity;
-        SharedPreferences storage = activity.getSharedPreferences(activity.getPackageName() + ".settings", Context.MODE_PRIVATE);
-        city = storage.getString(LOCATION_KEY, DEFAULT_LOCATION);
-        measurement = storage.getString(MEASUREMENT_KEY, DEFAULT_MEASUREMENT);
     }
 
     public String getCity() {
+        SharedPreferences storage = activity.getSharedPreferences(activity.getPackageName() + ".settings", Context.MODE_PRIVATE);
+        city = storage.getString(LOCATION_KEY, DEFAULT_LOCATION);
         return city;
     }
 
     public String getMeasurement() {
+        SharedPreferences storage = activity.getSharedPreferences(activity.getPackageName() + ".settings", Context.MODE_PRIVATE);
+        measurement = storage.getString(MEASUREMENT_KEY, DEFAULT_MEASUREMENT);
         return measurement;
+    }
+
+    public void setCity(String city) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences(activity.getPackageName() + ".settings", Context.MODE_PRIVATE).edit();
+        editor.putString(LOCATION_KEY, city);
+        editor.apply();
+    }
+
+    public void setMeasurement(String measurement) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences(activity.getPackageName() + ".settings", Context.MODE_PRIVATE).edit();
+        editor.putString(MEASUREMENT_KEY, measurement);
+        editor.apply();
     }
 }
