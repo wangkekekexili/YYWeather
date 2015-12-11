@@ -6,4 +6,13 @@
     <string name="default_weather">Sunny</string>
     <string name="default_temperature">37°C</string>
 
+    <!-- cities -->
+    <string-array name="autocomplete_cities">
+        <item>Tokyo</item>
+        <item>Shanghai</item>
+        <item>Beijing</item>
+        <item>Atlanta</item>
+        <item>San Fransisco</item>
+    </string-array>
+
 </resources>

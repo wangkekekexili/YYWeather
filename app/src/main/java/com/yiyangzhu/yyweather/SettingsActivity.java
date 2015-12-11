@@ -3,8 +3,8 @@ package com.yiyangzhu.yyweather;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -13,10 +13,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private RadioButton defaultLocationRadioButton;
     private RadioButton customLocationRadioButton;
-    private EditText customLocationEditText;
+    private AutoCompleteTextView customLocationAutoCompleteTextView;
     private RadioButton celciusRadioButton;
     private RadioButton fahrenheitRadioButton;
-    private Button doneButton;
 
     private Settings settings;
 
@@ -27,24 +26,29 @@ public class SettingsActivity extends AppCompatActivity {
 
         defaultLocationRadioButton = (RadioButton) findViewById(R.id.settings_default_radiobutton);
         customLocationRadioButton = (RadioButton) findViewById(R.id.settings_custom_radiobutton);
-        customLocationEditText = (EditText) findViewById(R.id.settings_custom_location);
+        customLocationAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.settings_custom_location);
         celciusRadioButton = (RadioButton) findViewById(R.id.settings_celcius);
         fahrenheitRadioButton = (RadioButton) findViewById(R.id.settings_fehrenheit);
-        doneButton = (Button) findViewById(R.id.settings_done);
 
-        customLocationEditText.setOnClickListener(new View.OnClickListener() {
+        customLocationAutoCompleteTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customLocationEditText.setCursorVisible(true);
+                customLocationAutoCompleteTextView.setCursorVisible(true);
             }
         });
+
+        String[] autoCompleteCities = getResources().getStringArray(R.array.autocomplete_cities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, autoCompleteCities);
+        customLocationAutoCompleteTextView.setAdapter(adapter);
+        customLocationAutoCompleteTextView.setThreshold(1);
 
         settings = new Settings(this);
         if (settings.getCity().equals(Settings.DEFAULT_LOCATION)) {
             defaultLocationRadioButton.setChecked(true);
         } else {
             customLocationRadioButton.setChecked(true);
-            customLocationEditText.setText(settings.getCity());
+            customLocationAutoCompleteTextView.setText(settings.getCity());
         }
         if (settings.getMeasurement().equals(Settings.MEASUREMENT_CELSIUS)) {
             celciusRadioButton.setChecked(true);
@@ -57,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (defaultLocationRadioButton.isChecked()) {
             settings.setCity(Settings.DEFAULT_LOCATION);
         } else {
-            settings.setCity(customLocationEditText.getText().toString());
+            settings.setCity(customLocationAutoCompleteTextView.getText().toString());
         }
         if (celciusRadioButton.isChecked()) {
             settings.setMeasurement(Settings.MEASUREMENT_CELSIUS);
