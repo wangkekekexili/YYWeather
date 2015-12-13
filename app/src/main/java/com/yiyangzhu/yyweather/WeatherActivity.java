@@ -177,6 +177,9 @@ public class WeatherActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.refresh_background_menuitem:
+                getAndSetBackgroundImage(cityTextView.getText().toString());
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
