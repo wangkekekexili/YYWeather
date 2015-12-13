@@ -34,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 customLocationAutoCompleteTextView.setCursorVisible(true);
+                customLocationRadioButton.setChecked(true);
             }
         });
 
