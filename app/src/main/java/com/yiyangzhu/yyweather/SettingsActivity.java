@@ -2,6 +2,8 @@ package com.yiyangzhu.yyweather;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -9,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -16,6 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private LinearLayout mainLinearLayout;
     private RadioButton defaultLocationRadioButton;
+    private TextView defaultLocationTextView;
     private RadioButton customLocationRadioButton;
     private AutoCompleteTextView customLocationAutoCompleteTextView;
     private RadioButton celciusRadioButton;
@@ -30,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         mainLinearLayout = (LinearLayout) findViewById(R.id.settings_main_linearlayout);
         defaultLocationRadioButton = (RadioButton) findViewById(R.id.settings_default_radiobutton);
+        defaultLocationTextView = (TextView) findViewById(R.id.settings_default_location);
         customLocationRadioButton = (RadioButton) findViewById(R.id.settings_custom_radiobutton);
         customLocationAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.settings_custom_location);
         celciusRadioButton = (RadioButton) findViewById(R.id.settings_celcius);
@@ -41,6 +46,13 @@ public class SettingsActivity extends AppCompatActivity {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 return true;
+            }
+        });
+
+        defaultLocationTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                defaultLocationRadioButton.setChecked(true);
             }
         });
 
@@ -72,7 +84,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void done(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (defaultLocationRadioButton.isChecked()) {
             settings.setCity(Settings.DEFAULT_LOCATION);
         } else {
@@ -84,6 +103,6 @@ public class SettingsActivity extends AppCompatActivity {
             settings.setMeasurement(Settings.MEASUREMENT_FAHRENHEIT);
         }
         finish();
+        return true;
     }
-
 }
