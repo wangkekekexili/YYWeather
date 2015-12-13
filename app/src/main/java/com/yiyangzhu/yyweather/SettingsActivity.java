@@ -2,15 +2,19 @@ package com.yiyangzhu.yyweather;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
+    private LinearLayout mainLinearLayout;
     private RadioButton defaultLocationRadioButton;
     private RadioButton customLocationRadioButton;
     private AutoCompleteTextView customLocationAutoCompleteTextView;
@@ -24,11 +28,21 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mainLinearLayout = (LinearLayout) findViewById(R.id.settings_main_linearlayout);
         defaultLocationRadioButton = (RadioButton) findViewById(R.id.settings_default_radiobutton);
         customLocationRadioButton = (RadioButton) findViewById(R.id.settings_custom_radiobutton);
         customLocationAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.settings_custom_location);
         celciusRadioButton = (RadioButton) findViewById(R.id.settings_celcius);
         fahrenheitRadioButton = (RadioButton) findViewById(R.id.settings_fehrenheit);
+
+        mainLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
 
         customLocationAutoCompleteTextView.setOnClickListener(new View.OnClickListener() {
             @Override
